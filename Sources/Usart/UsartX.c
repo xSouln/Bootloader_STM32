@@ -1,0 +1,57 @@
+//=================================================================================================================================
+#include <string.h>
+#include "xPort.h"
+#include "xRequest.h"
+#include "main.h"
+#include "usart.h"
+#include "xRx.h"
+#include "xTx.h"
+#include "UsartX.h"
+#include "Responses.h"
+//=================================================================================================================================
+#define USARTX_RX_CIRCLE_BUF_SIZE 0x1ff
+#define USARTX_RX_OBJECT_BUF_SIZE 0x1ff
+#define USARTX_TX_CIRCLE_BUF_SIZE 0x3ff
+//=================================================================================================================================
+TX_BUF_INIT(USARTX);
+RX_BUF_INIT(USARTX);
+//=================================================================================================================================
+//=================================================================================================================================
+inline void usart1_handler(){
+  xRxUpdate(&UsartX.Rx);
+}
+//=================================================================================================================================
+inline void usart1_init(){
+  UsartX.Rx.State.EndLineControl = true;
+
+  UsartX.Reg->CR1.ReceiverEnable = true;
+  UsartX.Reg->CR1.RxNotEmptyInterruptEnable = true;
+
+  //Ports.B.Out->USART1_DE = false;
+  UsartX.Reg->CR1.TransmitterEnable = true;
+  UsartX.Reg->CR1.TxCompleteInterruptEnable = false;
+  UsartX.Reg->CR1.TxEmptyInterruptEnable = false;
+}
+//=================================================================================================================================
+bool usart1_transmit_action(xPrintT *print){
+  //Ports.B.Out->USART1_DE = true;
+  UsartX.Tx.Out = *print;
+  UsartX.Reg->CR1.TxEmptyInterruptEnable = true;
+  return true;
+}
+//=================================================================================================================================
+UsartX_T UsartX = {
+  .Rx =
+  {
+    RX_OBJECT_RECEIVER_INIT(USARTX, rx_endline),
+    RX_CIRCLE_RECEIVER_INIT(USARTX)
+  },
+
+  .Tx =
+  {
+    TX_BINDING(USARTX, usart1_transmit_action)
+  },
+
+  .Reg = (UsartReg_T*)USART1
+};
+//=================================================================================================================================
