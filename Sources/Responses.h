@@ -36,19 +36,6 @@ enum REQUEST{
   SYSTEM_END = 500
   //============================
 };
-
-enum ERRORS{
-  ACCEPT = 0,
-  ERROR_DATA,
-  ERROR_CONTENT_SIZE,
-  ERROR_REQUEST,
-  ERROR_RESOLUTION,
-  UNKNOWN_COMMAND,
-  BUSY,
-  OUTSIDE,
-  ERROR_ACTION,
-  ERROR_POSITION
-};
 //=================================================================================================================================
 extern xRequestT Requests[];
 //=================================================================================================================================

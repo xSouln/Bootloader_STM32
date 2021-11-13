@@ -115,7 +115,7 @@ void USART1_IRQHandler(void)
     else { UsartX.Reg->CR1.TxEmptyInterruptEnable = false; }
   }
   /* USER CODE END USART1_IRQn 0 */
-  //HAL_UART_IRQHandler(&huart1);
+  HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
 
   /* USER CODE END USART1_IRQn 1 */

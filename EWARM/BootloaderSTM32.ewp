@@ -346,15 +346,15 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$/../Inc</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/CMSIS/Device/ST/STM32F1xx/Include</state>
-                    <state>C:/Users/rekuts/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/CMSIS/Include</state>
-                    <state>C:\Users\rekuts\Desktop\SDK\xLibMcrocontrollers</state>
                     <state>$PROJ_DIR$/../Sources</state>
                     <state>$PROJ_DIR$/../Sources/Usart</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/CMSIS/Device/ST/STM32F1xx/Include</state>
+                    <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/CMSIS/Include</state>
+                    <state>C:\Users\Souln\Desktop\SDK\xLibMcrocontrollers</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -375,7 +375,7 @@
                 <option>
                     <name>CCOptStrategy</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCOptLevelSlave</name>
@@ -438,7 +438,7 @@
                 <option>
                     <name>CCOptStrategySlave</name>
                     <version>0</version>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>CCGuardCalls</name>
@@ -1041,15 +1041,6 @@
             <name>User</name>
             <group>
                 <name>Sources</name>
-                <group>
-                    <name>Usart</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\Sources\Usart\UsartX.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Sources\Usart\UsartX.h</name>
-                    </file>
-                </group>
                 <file>
                     <name>$PROJ_DIR$\..\Sources\Bootloader.c</name>
                 </file>
@@ -1068,15 +1059,24 @@
                 <file>
                     <name>$PROJ_DIR$\..\Sources\Responses.h</name>
                 </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\xFlash.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\xFlash.h</name>
+                </file>
             </group>
             <group>
-                <name>xLib</name>
-                <group>
-                    <name>Macros</name>
-                </group>
-                <group>
-                    <name>Patterns</name>
-                </group>
+                <name>Usart</name>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Usart\UsartX.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Usart\UsartX.h</name>
+                </file>
+            </group>
+            <group>
+                <name>xLibMcrocontrollers</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xConverter.c</name>
                 </file>
@@ -1178,58 +1178,58 @@
         <group>
             <name>STM32F1xx_HAL_Driver</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_adc_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pcd_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_usb.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_usb.c</name>
             </file>
         </group>
     </group>
@@ -1238,16 +1238,16 @@
         <group>
             <name>USB_Device_Library</name>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Src\usbd_cdc.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_core.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ctlreq.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c</name>
+                <name>D:\STM32Cube\Repository\STM32Cube_FW_F1_V1.6.1\Middlewares\ST\STM32_USB_Device_Library\Core\Src\usbd_ioreq.c</name>
             </file>
         </group>
     </group>
