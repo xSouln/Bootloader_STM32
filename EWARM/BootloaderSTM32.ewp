@@ -347,7 +347,7 @@
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$/../Inc</state>
                     <state>$PROJ_DIR$/../Sources</state>
-                    <state>$PROJ_DIR$/../Sources/Usart</state>
+                    <state>$PROJ_DIR$/../Sources/Interfaces</state>
                     <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc</state>
                     <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy</state>
                     <state>D:/STM32Cube/Repository/STM32Cube_FW_F1_V1.6.1/Middlewares/ST/STM32_USB_Device_Library/Core/Inc</state>
@@ -1067,12 +1067,18 @@
                 </file>
             </group>
             <group>
-                <name>Usart</name>
+                <name>Interfaces </name>
                 <file>
-                    <name>$PROJ_DIR$\..\Sources\Usart\UsartX.c</name>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\Sources\Usart\UsartX.h</name>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.h</name>
                 </file>
             </group>
             <group>

@@ -33,9 +33,9 @@ inline void usart1_init(){
   UsartX.Reg->CR1.TxEmptyInterruptEnable = false;
 }
 //=================================================================================================================================
-bool usart1_transmit_action(xPrintT *print){
+bool usart1_transmit_action(xPacketT *print){
   //Ports.B.Out->USART1_DE = true;
-  UsartX.Tx.Out = *print;
+  UsartX.Tx.Packet = *print;
   UsartX.Reg->CR1.TxEmptyInterruptEnable = true;
   return true;
 }

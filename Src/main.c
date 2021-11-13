@@ -57,7 +57,9 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "xTimers.h"
+#include "Ports.h"
+#include "USBSerialPort.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -121,7 +123,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+    USBSerialPortThread();
+    
+    if (Timer.Events.Time1000ms){ Timer.Events.Time1000ms = false;
+      Ports.C.Out->LED ^= true;
+    }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */

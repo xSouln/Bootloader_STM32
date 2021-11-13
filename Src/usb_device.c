@@ -56,7 +56,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN Includes */
-
+extern USBD_CDC_ItfTypeDef USBD_Interface_fops_FS;
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN PV */

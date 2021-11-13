@@ -160,13 +160,13 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
 static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_DECLARATION */
-
+volatile int iState;
 /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
 
 /**
   * @}
   */
-
+/*
 USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
 {
   CDC_Init_FS,
@@ -174,7 +174,7 @@ USBD_CDC_ItfTypeDef USBD_Interface_fops_FS =
   CDC_Control_FS,
   CDC_Receive_FS
 };
-
+*/
 /* Private functions ---------------------------------------------------------*/
 /**
   * @brief  Initializes the CDC media low layer over the FS USB IP
@@ -214,7 +214,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   switch(cmd)
   {
     case CDC_SEND_ENCAPSULATED_COMMAND:
-
+      iState = -1;
     break;
 
     case CDC_GET_ENCAPSULATED_RESPONSE:
@@ -269,7 +269,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
   default:
     break;
   }
-
+  iState = cmd;
   return (USBD_OK);
   /* USER CODE END 5 */
 }
