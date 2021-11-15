@@ -37,7 +37,9 @@
 
 /* USER CODE BEGIN 0 */
 #include "UsartX.h"
-#include "xTimers.h"
+#include "xTimer.h"
+    
+extern xTimerT TimerMain;
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
@@ -55,7 +57,8 @@ extern UART_HandleTypeDef huart1;
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-  xTimerHandler();
+  //xTimerHandler();
+  xTimerDecrement(&TimerMain);
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   HAL_SYSTICK_IRQHandler();

@@ -9,9 +9,9 @@
 #include "UsartX.h"
 #include "Responses.h"
 //=================================================================================================================================
-#define USARTX_RX_CIRCLE_BUF_SIZE 0x1ff
+#define USARTX_RX_CIRCLE_BUF_SIZE_MASK 0x1ff
 #define USARTX_RX_OBJECT_BUF_SIZE 0x1ff
-#define USARTX_TX_CIRCLE_BUF_SIZE 0x3ff
+#define USARTX_TX_CIRCLE_BUF_SIZE_MASK 0x3ff
 //=================================================================================================================================
 TX_BUF_INIT(USARTX);
 RX_BUF_INIT(USARTX);
@@ -33,9 +33,9 @@ inline void usart1_init(){
   UsartX.Reg->CR1.TxEmptyInterruptEnable = false;
 }
 //=================================================================================================================================
-bool usart1_transmit_action(xPacketT *print){
+bool usart1_transmit_action(xObject context, uint8_t* ptr, uint16_t size){
   //Ports.B.Out->USART1_DE = true;
-  UsartX.Tx.Packet = *print;
+  //UsartX.Tx.Packet = *packet;
   UsartX.Reg->CR1.TxEmptyInterruptEnable = true;
   return true;
 }

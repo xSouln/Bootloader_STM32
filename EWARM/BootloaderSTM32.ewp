@@ -1040,6 +1040,21 @@
         <group>
             <name>User</name>
             <group>
+                <name>Interfaces </name>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.h</name>
+                </file>
+            </group>
+            <group>
                 <name>Sources</name>
                 <file>
                     <name>$PROJ_DIR$\..\Sources\Bootloader.c</name>
@@ -1067,27 +1082,18 @@
                 </file>
             </group>
             <group>
-                <name>Interfaces </name>
-                <file>
-                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\Sources\Interfaces\UsartX.h</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\Sources\Interfaces\USBSerialPort.h</name>
-                </file>
-            </group>
-            <group>
                 <name>xLibMcrocontrollers</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xConverter.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xConverter.h</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xList.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xList.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xPort.h</name>
@@ -1120,10 +1126,10 @@
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xThread.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimers.c</name>
+                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimer.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimers.h</name>
+                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimer.h</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTx.c</name>

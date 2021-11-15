@@ -42,7 +42,7 @@ void Response_REQUEST_TRY(xRequestT *request, xTxT *tx, xObject request_obj, uin
   xTxAdd(tx, request->Content.obj, request->Content.size);
 }
 //=================================================================================================================================
-int rx_endline(uint8_t *obj, uint16_t size){ 
+int rx_endline(xObject context, uint8_t *obj, uint16_t size){ 
   if(size >= sizeof(RequestHeaderT) && obj[0] == REQUEST_START_CHARACTER && obj[5] == RESPONSE_END_CHARACTER){
     if(size < sizeof(RequestT)) { return RX_STORAGE; }
     RequestT *request = (RequestT*)obj;

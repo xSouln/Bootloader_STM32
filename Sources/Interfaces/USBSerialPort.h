@@ -10,9 +10,22 @@
 
 #include "usbd_cdc.h"
 //=================================================================================================================================
+typedef union{
+  struct{
+    uint16_t Reset : 1;
+    uint16_t Ready : 1;
+    uint16_t Error : 1;
+    uint16_t Busy : 1;
+    uint16_t Timeout : 1;
+  };
+  uint16_t Value;
+}USBSerialPortStateT;
+//=================================================================================================================================
 typedef struct{
   xRxT Rx;
   xTxT Tx;
+  
+  USBSerialPortStateT State;
 }USBSerialPortT;
 //=================================================================================================================================
 extern USBSerialPortT USBSerialPort;
