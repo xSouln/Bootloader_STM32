@@ -84,6 +84,7 @@ int remove_action = -1;
 int add_action = -1;
 int insert_action = -1;
 int count;
+int phase = 0;
 
 xTimerRequestT *TimerRequest1;
 xTimerRequestT *TimerRequest2;
@@ -91,12 +92,15 @@ xTimerRequestT *TimerRequest3;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-void ThreadAction1(xThreadT* context, xThreadRequestT* request){  
+void ThreadAction1(xThreadT* context, xThreadRequestT* request){
+  /*
   for(int i = 0; i < List.Count; i++){
     uint8_t* str = xListGet(&List, i);
     xTxAdd(&USBSerialPort.Tx, str, strlen((char*)str));
   }
   xTxAdd(&USBSerialPort.Tx, "\r", 1);
+*/
+  xTxAdd(&USBSerialPort.Tx, "\rThreadAction1\r", strlen("\rThreadAction1\r"));
 }
 
 void ThreadAction2(xThreadT* context, xThreadRequestT* request){
@@ -105,6 +109,17 @@ void ThreadAction2(xThreadT* context, xThreadRequestT* request){
 
 void ThreadAction3(xThreadT* context, xThreadRequestT* request){
   count++;
+  
+  switch(phase){
+  case 0: xTxAdd(&USBSerialPort.Tx, "phase:0 ", strlen("phase:0 ")); break;
+  case 1: xTxAdd(&USBSerialPort.Tx, "phase:1 ", strlen("phase:1 ")); break;
+  case 2: xTxAdd(&USBSerialPort.Tx, "phase:2 ", strlen("phase:2 ")); break;
+  case 3: xTxAdd(&USBSerialPort.Tx, "phase:3 ", strlen("phase:3 ")); break;
+  case 4: xTxAdd(&USBSerialPort.Tx, "phase:4 ", strlen("phase:4 ")); break;
+  case 5: xTxAdd(&USBSerialPort.Tx, "phase:5 ", strlen("phase:5 ")); break;
+  default: phase = 0; return;
+  }
+  phase++;
 }
 
 void TimerAction1(xTimerT* context, xTimerRequestT* request){
@@ -121,7 +136,7 @@ void TimerAction2(xTimerT* context, xTimerRequestT* request){
 }
 
 void TimerAction3(xTimerT* context, xTimerRequestT* request){
-  xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
+  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
   xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
 }
 /* USER CODE END 0 */
@@ -209,10 +224,6 @@ int main(void)
       insert_action = -1;
     }
     
-    if (Timer.Events.Time1000ms){ Timer.Events.Time1000ms = false;
-      //Ports.C.Out->LED ^= true;
-      xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction1, "qwerty\r", 7, 0);
-    }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
