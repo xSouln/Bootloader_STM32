@@ -92,15 +92,16 @@ xTimerRequestT *TimerRequest3;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-void ThreadAction1(xThreadT* context, xThreadRequestT* request){
-  /*
-  for(int i = 0; i < List.Count; i++){
-    uint8_t* str = xListGet(&List, i);
-    xTxAdd(&USBSerialPort.Tx, str, strlen((char*)str));
+void ThreadAction1(xThreadT* context, xThreadRequestT* request)
+{
+  xListElementT *element = List.Head;
+  //xTxAdd(&USBSerialPort.Tx, "\rThreadAction1\r", strlen("\rThreadAction1\r"));
+  while(element)
+  {
+    xTxAdd(&USBSerialPort.Tx, element->Value, strlen(element->Value));
+    element = element->Next;
   }
-  xTxAdd(&USBSerialPort.Tx, "\r", 1);
-*/
-  xTxAdd(&USBSerialPort.Tx, "\rThreadAction1\r", strlen("\rThreadAction1\r"));
+  xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
 }
 
 void ThreadAction2(xThreadT* context, xThreadRequestT* request){
@@ -115,8 +116,18 @@ void ThreadAction3(xThreadT* context, xThreadRequestT* request){
   case 1: xTxAdd(&USBSerialPort.Tx, "phase:1 ", strlen("phase:1 ")); break;
   case 2: xTxAdd(&USBSerialPort.Tx, "phase:2 ", strlen("phase:2 ")); break;
   case 3: xTxAdd(&USBSerialPort.Tx, "phase:3 ", strlen("phase:3 ")); break;
-  case 4: xTxAdd(&USBSerialPort.Tx, "phase:4 ", strlen("phase:4 ")); break;
-  case 5: xTxAdd(&USBSerialPort.Tx, "phase:5 ", strlen("phase:5 ")); break;
+  
+  case 4:
+    phase = 0;
+    xTxAdd(&USBSerialPort.Tx, "phase:4 ", strlen("phase:4 "));
+    xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
+  return;
+  
+  case 5:
+    phase = 0;
+    xTxAdd(&USBSerialPort.Tx, "phase:5 ", strlen("phase:5 "));
+  break;
+  
   default: phase = 0; return;
   }
   phase++;
@@ -132,12 +143,13 @@ void TimerAction1(xTimerT* context, xTimerRequestT* request){
 
 void TimerAction2(xTimerT* context, xTimerRequestT* request){
   xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction2, 0, 0, 0);
-  xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
+  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
 }
 
 void TimerAction3(xTimerT* context, xTimerRequestT* request){
   //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
-  xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
+  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
+  //xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 100, 0)->State.Enable = true;
 }
 /* USER CODE END 0 */
 
@@ -158,7 +170,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -178,20 +190,20 @@ int main(void)
   /* USER CODE BEGIN 2 */
   TimerRequest1 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction1, 1000, 1000);
   TimerRequest1->Object = "timer\r";
-  TimerRequest1->ObjectSize = 6;
-  TimerRequest1->Handler.Enable = true;
+  TimerRequest1->State.Enable = true;
   
   TimerRequest2 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction2, 1000, 500);
-  TimerRequest2->Handler.Enable = true;
+  TimerRequest2->State.Enable = true;
   
-  TimerRequest3 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 1000, 100);  
-  TimerRequest3->Handler.Enable = true;
+  xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 100, 0)->State.Enable = true;
+  TimerRequest3->State.Enable = true;
   
   xListAdd(&List, "state:1 ");
   xListAdd(&List, "state:2 ");
   xListAdd(&List, "state:3 ");
   xListAdd(&List, "state:4 ");
   xListAdd(&List, "state:5 ");
+  
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -209,7 +221,7 @@ int main(void)
     
     if(add_action != -1){
       switch(add_action){
-      case 0: xListAdd(&List, "state:1 "); break;
+      case 0: xListAdd(&List, "state:0 "); break;
       case 1: xListAdd(&List, "state:1 "); break;
       case 2: xListAdd(&List, "state:2 "); break;
       case 3: xListAdd(&List, "state:3 "); break;
