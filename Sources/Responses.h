@@ -10,30 +10,31 @@
 //=================================================================================================================================
 #include "xType.h"
 //=================================================================================================================================
-enum REQUEST{
+enum REQUESTS{
   //============================
-  SYSTEM = 0,
+  REQUESTS_START = 0,
     
-  GET_BY_ID = 100,
-  GET_DRV_STATE,
+  GET_X = 100,
+  GET_INFO,
   GET_HANDLER,
   
-  SET_HANDLER = 200,
+  SET_X = 200,
   SET_OPTIONS,
-  SET_POSITION,
-  SET_REQUESTS,
-  SET_MOTION_STEPS,
+  SET_HANDLER,
   
-  TRY = 300,
-  TRY_CLEAR,
-  TRY_MOTION_START,
+  TRY_X = 300,
+  TRY_ERASE,
+  TRY_WRITE,
+  TRY_READ,
   TRY_STOP,
-  TRY_RESET_STEPS,
+  TRY_JUMP_TO_MAIN,
+  TRY_JUMP_TO_BOOT,
   
-  EVT_POSITION_SET = 400,
-  EVT_STOPPED,
+  EVT_X = 400,
+  EVT_WRITE_COMPLITE,
+  EVT_READ_COMPLITE,
   
-  SYSTEM_END = 500
+  REQUESTS_END = 500
   //============================
 };
 //=================================================================================================================================

@@ -11,6 +11,25 @@
 #include "xType.h"
 #include "xPort.h"
 //=================================================================================================================================
+typedef struct RequestWriteDataT
+{
+  uint32_t Address;
+  uint32_t Action;
+}RequestWriteDataT;
+//=================================================================================================================================
+typedef struct BootloaderInfoT
+{
+  uint32_t StartAddress;
+  uint32_t EndAddress;
+  uint16_t Crc;
+  uint16_t Handler;
+}BootloaderInfoT;
+//=================================================================================================================================
+typedef struct BootloaderT
+{
+  BootloaderInfoT Info;
+}BootloaderT;
 
+extern BootloaderT Bootloader;
 //=================================================================================================================================
 #endif /* BOOTLOADER_STM32_H_ */

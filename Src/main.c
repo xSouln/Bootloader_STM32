@@ -62,6 +62,7 @@
 #include "USBSerialPort.h"
 #include "xThread.h"
 #include "xList.h"
+#include "Bootloader.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -85,10 +86,17 @@ int add_action = -1;
 int insert_action = -1;
 int count;
 int phase = 0;
+int (*main_funk)();
+
+volatile BootloaderInfoT* info = (volatile BootloaderInfoT*)0x200013f0;
+BootloaderInfoT bootloader_state;
+BootloaderInfoT bootloader_state1;
 
 xTimerRequestT *TimerRequest1;
 xTimerRequestT *TimerRequest2;
 xTimerRequestT *TimerRequest3;
+
+SCB_Type* reg = SCB;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
@@ -110,6 +118,7 @@ void ThreadAction2(xThreadT* context, xThreadRequestT* request){
 
 void ThreadAction3(xThreadT* context, xThreadRequestT* request){
   count++;
+  info->StartAddress++;
   
   switch(phase){
   case 0: xTxAdd(&USBSerialPort.Tx, "phase:0 ", strlen("phase:0 ")); break;
@@ -147,6 +156,7 @@ void TimerAction2(xTimerT* context, xTimerRequestT* request){
 }
 
 void TimerAction3(xTimerT* context, xTimerRequestT* request){
+  //bootloader_state1.StartAddress++;
   //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
   //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
   //xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 100, 0)->State.Enable = true;
@@ -161,6 +171,17 @@ void TimerAction3(xTimerT* context, xTimerRequestT* request){
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  
+  switch(bootloader_state.StartAddress)
+  {
+  case 0: break;
+  case 1: return;
+  case 2: NVIC_SystemReset();
+  }
+  
+  __set_PRIMASK(1);
+  SCB->VTOR = ((uint32_t)0x08000000);
+  __set_PRIMASK(0);
 
   /* USER CODE END 1 */
 
@@ -177,7 +198,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -188,6 +209,9 @@ int main(void)
   MX_ADC1_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
+  main_funk = main;
+  reg->ICSR;
+  
   TimerRequest1 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction1, 1000, 1000);
   TimerRequest1->Object = "timer\r";
   TimerRequest1->State.Enable = true;
@@ -204,6 +228,12 @@ int main(void)
   xListAdd(&List, "state:4 ");
   xListAdd(&List, "state:5 ");
   
+  info->Crc = 0x0f;
+  bootloader_state.Crc = 0x0f;
+  bootloader_state1.Crc = 0x0f;
+  
+main_init_end:;
+  //first block ARRAYS,
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -219,7 +249,10 @@ int main(void)
       remove_action = -1;
     }
     
-    if(add_action != -1){
+    if(add_action != -1)
+    {
+      main_funk();
+      
       switch(add_action){
       case 0: xListAdd(&List, "state:0 "); break;
       case 1: xListAdd(&List, "state:1 "); break;

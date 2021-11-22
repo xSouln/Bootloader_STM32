@@ -9,6 +9,7 @@
 #include "Responses.h"
 #include "xTx.h"
 #include "UsartX.h"
+#include "Bootloader.h"
 //=================================================================================================================================
 #define VA_ARGS_SHIFT(P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,PN,...) PN
 #define VA_ARGS_COUNT(...) VA_ARGS_SHIFT(-1,##__VA_ARGS__,9,8,7,6,5,4,3,2,1,0)
@@ -26,24 +27,16 @@ void Response_REQUEST_GET(xRequestT *request, xTxT *tx, xObject request_obj, uin
   xTxAdd(tx, request->Content.obj, request->Content.size);
 }
 //=================================================================================================================================
-void Response_REQUEST_SET(xRequestT *request, xTxT *tx, xObject request_obj, uint16_t request_obj_size, uint8_t error){
-  ResponseInfoT info = { .Key = request->Id, .Size = request->Content.size + sizeof(error) + request_obj_size };  
-  xTxAdd(tx, &info, sizeof(info));  
-  xTxAdd(tx, request_obj, request_obj_size);
-  xTxAdd(tx, &error, sizeof(error));
-  xTxAdd(tx, request->Content.obj, request->Content.size);
-}
-//=================================================================================================================================
-void Response_REQUEST_TRY(xRequestT *request, xTxT *tx, xObject request_obj, uint16_t request_obj_size, uint8_t error){
-  ResponseInfoT info = { .Key = request->Id, .Size = request->Content.size + sizeof(error) + request_obj_size };  
-  xTxAdd(tx, &info, sizeof(info));  
-  xTxAdd(tx, request_obj, request_obj_size);
+void Response_REQUEST_DEFAULT(xRequestT *request, xTxT *tx, xObject request_obj, uint16_t request_obj_size, uint8_t error){
+  ResponseInfoT info = { .Key = request->Id, .Size = request->Content.size + sizeof(error) };  
+  xTxAdd(tx, &info, sizeof(info));
   xTxAdd(tx, &error, sizeof(error));
   xTxAdd(tx, request->Content.obj, request->Content.size);
 }
 //=================================================================================================================================
 int rx_endline(xObject context, uint8_t *obj, uint16_t size){ 
-  if(size >= sizeof(RequestHeaderT) && obj[0] == REQUEST_START_CHARACTER && obj[5] == RESPONSE_END_CHARACTER){
+  if(size >= sizeof(RequestHeaderT) && obj[0] == REQUEST_START_CHARACTER && obj[5] == RESPONSE_END_CHARACTER)
+  {
     if(size < sizeof(RequestT)) { return RX_STORAGE; }
     RequestT *request = (RequestT*)obj;
     uint16_t action_size = size - sizeof(RequestT);
@@ -55,11 +48,14 @@ int rx_endline(xObject context, uint8_t *obj, uint16_t size){
     uint8_t action_error = ACCEPT;
     
     uint8_t i = 0;
-    while(Requests[i].Id != (uint16_t)-1){
-      if(request->Info.Key == Requests[i].Id){
-        if(Requests[i].Control) { action_error = (uint16_t)Requests[i].Control(action); }
+    while(Requests[i].Id != (uint16_t)-1)
+    {
+      if(request->Info.Key == Requests[i].Id)
+      {
+        if(Requests[i].Control) { action_error = Requests[i].Control(0, action, action_size); }
         
-        if(Requests[i].Response){
+        if(Requests[i].Response)
+        {
           xTxAdd(&UsartX.Tx, RESPONSE_HEADER, sizeof_str(RESPONSE_HEADER));
           Requests[i].Response(&Requests[i], &UsartX.Tx, action, action_size, action_error);
           xTxAdd(&UsartX.Tx, RESPONSE_END, sizeof_str(RESPONSE_END));
@@ -74,7 +70,7 @@ int rx_endline(xObject context, uint8_t *obj, uint16_t size){
 //=================================================================================================================================
 //=================================================================================================================================
 xRequestT Requests[] = {
-  //NEW_REQUEST(CK_GET_DRV_STATE, Response_REQUEST_GET, 0, CK.MotorState.DRV),
+  NEW_REQUEST(GET_INFO, Response_REQUEST_GET, 0, Bootloader.Info),
   { .Id = -1 }
 };
 //=================================================================================================================================

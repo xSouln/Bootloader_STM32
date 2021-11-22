@@ -2,16 +2,15 @@
 /*-Editor annotation file-*/
 /* IcfEditorFile="$TOOLKIT_DIR$\config\ide\IcfEditor\cortex_v1_0.xml" */
 /*-Specials-*/
-define symbol __ICFEDIT_intvec_start__ = 0x08000000;
+define symbol __ICFEDIT_intvec_start__ = 0x20000000;
 /*-Memory Regions-*/
-define symbol __ICFEDIT_region_ROM_start__   = 0x08000000 ;
-define symbol __ICFEDIT_region_ROM_end__     = 0x0801FFFF;
-define symbol __ICFEDIT_region_RAM_start__   = 0x20000000;
+define symbol __ICFEDIT_region_ROM_start__ = 0x20000000 ;
+define symbol __ICFEDIT_region_ROM_end__   = 0x200013FF;
+define symbol __ICFEDIT_region_RAM_start__ = 0x20001400;
 define symbol __ICFEDIT_region_RAM_end__     = 0x20004FFF;
 /*-Sizes-*/
 define symbol __ICFEDIT_size_cstack__ = 0x600;
 define symbol __ICFEDIT_size_heap__ = 0x400;
-define symbol __ICFEDIT_size_bootloader_info__ = 0x20;
 /**** End of ICF editor section. ###ICF###*/
 
 
@@ -26,10 +25,7 @@ initialize by copy { readwrite };
 do not initialize  { section .noinit };
 
 place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
-define block ARRAYS with fixed order
-{
- symbol bootloader_state
-};
 
 place in ROM_region   { readonly };
-place in RAM_region   { readwrite, block CSTACK, block HEAP, first block ARRAYS };
+place in RAM_region   { readwrite,
+                        block CSTACK, block HEAP };
