@@ -9,10 +9,10 @@
 #include <stdlib.h>
 #include "Bootloader.h"
 #include "xRequest.h"
+//#include "stm32f1xx_hal_flash_ex.h"
 //=================================================================================================================================
 uint16_t ActionWrite(xObject context, xObject object, uint16_t object_size)
 {
-  
   
   return ACCEPT;
 }

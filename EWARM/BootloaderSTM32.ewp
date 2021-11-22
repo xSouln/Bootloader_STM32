@@ -354,8 +354,7 @@
                     <state>$PROJ_DIR$/../Inc</state>
                     <state>$PROJ_DIR$/../Sources</state>
                     <state>$PROJ_DIR$/../Sources/Interfaces</state>
-                    <state>C:\Users\Souln\Desktop\SDK\xLibMcrocontrollers</state>
-                    <state>C:\Users\rekuts\Desktop\SDK\xLibMcrocontrollers</state>
+                    <state>$xLibMcrocontrollers$/</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1085,61 +1084,61 @@
             <group>
                 <name>xLibMcrocontrollers</name>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xConverter.c</name>
+                    <name>$xLibMcrocontrollers$\xConverter.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xConverter.h</name>
+                    <name>$xLibMcrocontrollers$\xConverter.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xList.c</name>
+                    <name>$xLibMcrocontrollers$\xList.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xList.h</name>
+                    <name>$xLibMcrocontrollers$\xList.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xPort.h</name>
+                    <name>$xLibMcrocontrollers$\xPort.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xRequest.h</name>
+                    <name>$xLibMcrocontrollers$\xRequest.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xResponse.c</name>
+                    <name>$xLibMcrocontrollers$\xResponse.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xResponse.h</name>
+                    <name>$xLibMcrocontrollers$\xResponse.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xRx.c</name>
+                    <name>$xLibMcrocontrollers$\xRx.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xRx.h</name>
+                    <name>$xLibMcrocontrollers$\xRx.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTaskLine.c</name>
+                    <name>$xLibMcrocontrollers$\xTaskLine.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTaskLine.h</name>
+                    <name>$xLibMcrocontrollers$\xTaskLine.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xThread.c</name>
+                    <name>$xLibMcrocontrollers$\xThread.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xThread.h</name>
+                    <name>$xLibMcrocontrollers$\xThread.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimer.c</name>
+                    <name>$xLibMcrocontrollers$\xTimer.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTimer.h</name>
+                    <name>$xLibMcrocontrollers$\xTimer.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTx.c</name>
+                    <name>$xLibMcrocontrollers$\xTx.c</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xTx.h</name>
+                    <name>$xLibMcrocontrollers$\xTx.h</name>
                 </file>
                 <file>
-                    <name>$PROJ_DIR$\..\..\SDK\xLibMcrocontrollers\xType.h</name>
+                    <name>$xLibMcrocontrollers$\xType.h</name>
                 </file>
             </group>
             <file>
