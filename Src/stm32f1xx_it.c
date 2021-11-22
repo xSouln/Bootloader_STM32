@@ -110,6 +110,11 @@ void USART1_IRQHandler(void)
   /* USER CODE BEGIN USART1_IRQn 0 */
   if(UsartX.Reg->SR.RxNotEmpty){ UsartX.Reg->SR.RxNotEmpty = false;
     xRxCircleAdd(UsartX.Rx, USART1->DR);
+    /*
+    UsartX.Rx->CircleReceiver.Buffer[UsartX.Rx->CircleReceiver.TotalIndex] = USART1->DR;
+    UsartX.Rx->CircleReceiver.TotalIndex++;
+    UsartX.Rx->CircleReceiver.TotalIndex &= UsartX.Rx->CircleReceiver.SizeMask;
+    */
     return;
   }
 

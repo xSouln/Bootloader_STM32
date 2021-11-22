@@ -15,14 +15,19 @@
 //=================================================================================================================================
 TX_BUF_INIT(USARTX);
 RX_BUF_INIT(USARTX);
+//RX_INIT(USARTX, 0x1ff, 0x1ff, rx_endline);
 //=================================================================================================================================
 //=================================================================================================================================
-inline void usart1_handler(){
+inline void usart1_handler()
+{
   xRxUpdate(&UsartX.Rx);
+  
+  if(UsartX.Tx.State.HandlerIndex != UsartX.Tx.State.TotalIndex && !UsartX.Reg->CR1.TxEmptyInterruptEnable){ UsartX.Reg->CR1.TxEmptyInterruptEnable = true; }
 }
 //=================================================================================================================================
-inline void usart1_init(){
-  UsartX.Rx.State.EndLineControl = true;
+inline void usart1_init()
+{
+  //UsartX.Rx.State.EndLineControl = true;
 
   UsartX.Reg->CR1.ReceiverEnable = true;
   UsartX.Reg->CR1.RxNotEmptyInterruptEnable = true;
@@ -33,7 +38,8 @@ inline void usart1_init(){
   UsartX.Reg->CR1.TxEmptyInterruptEnable = false;
 }
 //=================================================================================================================================
-bool usart1_transmit_action(xObject context, uint8_t* ptr, uint16_t size){
+bool usart1_transmit_action(xObject context, uint8_t* ptr, uint16_t size)
+{
   //Ports.B.Out->USART1_DE = true;
   //UsartX.Tx.Packet = *packet;
   UsartX.Reg->CR1.TxEmptyInterruptEnable = true;
@@ -41,12 +47,12 @@ bool usart1_transmit_action(xObject context, uint8_t* ptr, uint16_t size){
 }
 //=================================================================================================================================
 UsartX_T UsartX = {
-  .Rx =
+  .Rx = //&USARTX_RX,  
   {
     RX_OBJECT_RECEIVER_INIT(USARTX, rx_endline),
     RX_CIRCLE_RECEIVER_INIT(USARTX)
   },
-
+  
   .Tx =
   {
     TX_BINDING(USARTX, usart1_transmit_action)

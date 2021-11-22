@@ -63,14 +63,15 @@
 #include "xThread.h"
 #include "xList.h"
 #include "Bootloader.h"
+#include "UsartX.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-//THREAD_INIT(Main, 0, 0x07, 0);
-//TIMER_INIT(Main, 0, 5);
+#define APLICATION_ADDRESS 0x08008000
+
 xThreadT ThreadMain;
 xTimerT TimerMain;
 /* USER CODE END PV */
@@ -81,85 +82,99 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 xListT List;
+
 int remove_action = -1;
 int add_action = -1;
 int insert_action = -1;
 int count;
 int phase = 0;
-int (*main_funk)();
 
-volatile BootloaderInfoT* info = (volatile BootloaderInfoT*)0x200013f0;
 BootloaderInfoT bootloader_state;
-BootloaderInfoT bootloader_state1;
 
-xTimerRequestT *TimerRequest1;
-xTimerRequestT *TimerRequest2;
-xTimerRequestT *TimerRequest3;
+uint32_t app_jump_address;
+AppFuncT app_main;
+
+xTimerTaskT *TimerRequest1;
+xTimerTaskT *TimerRequest2;
 
 SCB_Type* reg = SCB;
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-void ThreadAction1(xThreadT* context, xThreadRequestT* request)
+void AppMain();
+
+void ThreadAction1(xThreadT* context, xThreadTaskT* request)
 {
   xListElementT *element = List.Head;
-  //xTxAdd(&USBSerialPort.Tx, "\rThreadAction1\r", strlen("\rThreadAction1\r"));
+  
   while(element)
   {
     xTxAdd(&USBSerialPort.Tx, element->Value, strlen(element->Value));
     element = element->Next;
   }
+  
   xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
 }
 
-void ThreadAction2(xThreadT* context, xThreadRequestT* request){
+void ThreadAction2(xThreadT* context, xThreadTaskT* request)
+{
   Ports.C.Out->LED ^= true;
 }
 
-void ThreadAction3(xThreadT* context, xThreadRequestT* request){
+void ThreadAction3(xThreadT* context, xThreadTaskT* request)
+{
   count++;
-  info->StartAddress++;
   
-  switch(phase){
-  case 0: xTxAdd(&USBSerialPort.Tx, "phase:0 ", strlen("phase:0 ")); break;
-  case 1: xTxAdd(&USBSerialPort.Tx, "phase:1 ", strlen("phase:1 ")); break;
-  case 2: xTxAdd(&USBSerialPort.Tx, "phase:2 ", strlen("phase:2 ")); break;
-  case 3: xTxAdd(&USBSerialPort.Tx, "phase:3 ", strlen("phase:3 ")); break;
-  
-  case 4:
-    phase = 0;
-    xTxAdd(&USBSerialPort.Tx, "phase:4 ", strlen("phase:4 "));
-    xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
-  return;
-  
-  case 5:
-    phase = 0;
-    xTxAdd(&USBSerialPort.Tx, "phase:5 ", strlen("phase:5 "));
-  break;
-  
-  default: phase = 0; return;
+  switch(phase)
+  {
+    case 0: xTxAdd(&USBSerialPort.Tx, "phase:0 ", strlen("phase:0 ")); break;
+    case 1: xTxAdd(&USBSerialPort.Tx, "phase:1 ", strlen("phase:1 ")); break;
+    case 2: xTxAdd(&USBSerialPort.Tx, "phase:2 ", strlen("phase:2 ")); break;
+    case 3: xTxAdd(&USBSerialPort.Tx, "phase:3 ", strlen("phase:3 ")); break;
+    
+    case 4:
+      phase = 0;
+      xTxAdd(&USBSerialPort.Tx, "phase:4 ", strlen("phase:4 "));
+      xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
+    return;
+    
+    case 5:
+      phase = 0;
+      xTxAdd(&USBSerialPort.Tx, "phase:5 ", strlen("phase:5 "));
+    break;
+    
+    default: phase = 0; return;
   }
   phase++;
 }
 
-void TimerAction1(xTimerT* context, xTimerRequestT* request){
-  /*
-  xTxAdd(&USBSerialPort.Tx, request->Object, request->ObjectSize);
-  xTxAdd(&USBSerialPort.Tx, request->Object, request->ObjectSize);
-*/  
+void TimerAction1(xTimerT* context, xTimerTaskT* request)
+{
   xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction1, 0, 0, 0);
 }
 
-void TimerAction2(xTimerT* context, xTimerRequestT* request){
+void TimerAction2(xTimerT* context, xTimerTaskT* request)
+{
   xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction2, 0, 0, 0);
-  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
 }
 
-void TimerAction3(xTimerT* context, xTimerRequestT* request){
-  //bootloader_state1.StartAddress++;
-  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
-  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction3, 0, 0, 0);
-  //xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 100, 0)->State.Enable = true;
+void TimerAction3(xTimerT* context, xTimerTaskT* request)
+{
+  AppMain();
+}
+
+void AppMain()
+{
+  __disable_irq();
+  
+  USBD_Stop(&hUsbDeviceFS);
+  USBD_DeInit(&hUsbDeviceFS);  
+  HAL_DeInit();
+  
+  __set_MSP(*(volatile uint32_t*)APLICATION_ADDRESS);
+  app_main();
+  
+  NVIC_SystemReset();
 }
 /* USER CODE END 0 */
 
@@ -171,12 +186,13 @@ void TimerAction3(xTimerT* context, xTimerRequestT* request){
 int main(void)
 {
   /* USER CODE BEGIN 1 */
+  app_jump_address = *(uint32_t*)(APLICATION_ADDRESS + 4);  
+  app_main = (AppFuncT)app_jump_address;
   
   switch(bootloader_state.StartAddress)
   {
-  case 0: break;
-  case 1: return;
-  case 2: NVIC_SystemReset();
+    case 1: return 0;
+    case 2: NVIC_SystemReset();
   }
   
   __set_PRIMASK(1);
@@ -209,7 +225,8 @@ int main(void)
   MX_ADC1_Init();
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  main_funk = main;
+  usart1_init();
+  
   reg->ICSR;
   
   TimerRequest1 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction1, 1000, 1000);
@@ -219,8 +236,7 @@ int main(void)
   TimerRequest2 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction2, 1000, 500);
   TimerRequest2->State.Enable = true;
   
-  xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 100, 0)->State.Enable = true;
-  TimerRequest3->State.Enable = true;
+  xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 10000, 0);
   
   xListAdd(&List, "state:1 ");
   xListAdd(&List, "state:2 ");
@@ -228,11 +244,8 @@ int main(void)
   xListAdd(&List, "state:4 ");
   xListAdd(&List, "state:5 ");
   
-  info->Crc = 0x0f;
   bootloader_state.Crc = 0x0f;
-  bootloader_state1.Crc = 0x0f;
   
-main_init_end:;
   //first block ARRAYS,
   /* USER CODE END 2 */
 
@@ -241,33 +254,10 @@ main_init_end:;
   while (1)
   {
     USBSerialPortThread();
+    usart1_handler();
+    
     xThread(&ThreadMain);
     xTimer(&TimerMain);
-    
-    if(remove_action != -1){
-      xListRemoveAt(&List, remove_action);
-      remove_action = -1;
-    }
-    
-    if(add_action != -1)
-    {
-      main_funk();
-      
-      switch(add_action){
-      case 0: xListAdd(&List, "state:0 "); break;
-      case 1: xListAdd(&List, "state:1 "); break;
-      case 2: xListAdd(&List, "state:2 "); break;
-      case 3: xListAdd(&List, "state:3 "); break;
-      case 4: xListAdd(&List, "state:4 "); break;
-      case 5: xListAdd(&List, "state:5 "); break;
-      }
-      add_action = -1;
-    }
-    
-    if(insert_action != -1){
-      xListInsert(&List, insert_action, "state:x ");
-      insert_action = -1;
-    }
     
   /* USER CODE END WHILE */
 
