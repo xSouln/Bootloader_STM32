@@ -10,6 +10,7 @@
 #include "xTx.h"
 #include "UsartX.h"
 #include "Bootloader.h"
+#include "xFlash.h"
 //=================================================================================================================================
 #define VA_ARGS_SHIFT(P1,P2,P3,P4,P5,P6,P7,P8,P9,P10,PN,...) PN
 #define VA_ARGS_COUNT(...) VA_ARGS_SHIFT(-1,##__VA_ARGS__,9,8,7,6,5,4,3,2,1,0)
@@ -21,13 +22,17 @@ xObject RequestObjects_##name[VA_ARGS_COUNT(__VA_ARGS__)] = { &#__VA_ARGS__ }; \
 uint8_t RequestObjectSize_##name[VA_ARGS_COUNT(__VA_ARGS__)] = { sizeof(#__VA_ARGS__) }; \
 xRequestT Request_##name = { .Content = { 0 }, .Contents = RequestContent_##name }
 //=================================================================================================================================
-void Response_REQUEST_GET(xTxT *tx, xRequestT *request, xObject request_obj, uint16_t request_obj_size, uint8_t error){
+xRequestT debug_request;
+uint8_t* debug_action;
+uint16_t debug_action_size;
+//=================================================================================================================================
+void Response_REQUEST_GET(xTxT *tx, xRequestT *request, xObject request_obj, uint16_t request_obj_size, int16_t error){
   ResponseInfoT info = { .Key = request->Id, .Size = request->Content.size };  
   xTxAdd(tx, &info, sizeof(info));  
   xTxAdd(tx, request->Content.obj, request->Content.size);
 }
 //=================================================================================================================================
-void Response_REQUEST_DEFAULT(xTxT *tx, xRequestT *request, xObject request_obj, uint16_t request_obj_size, uint8_t error){
+void Response_REQUEST_DEFAULT(xTxT *tx, xRequestT *request, xObject request_obj, uint16_t request_obj_size, int16_t error){
   ResponseInfoT info = { .Key = request->Id, .Size = request->Content.size + sizeof(error) };  
   xTxAdd(tx, &info, sizeof(info));
   xTxAdd(tx, &error, sizeof(error));
@@ -44,7 +49,7 @@ int rx_endline(xObject context, uint8_t *obj, uint16_t size){
     if(action_size < request->Info.Size) { return RX_STORAGE; }
     if(action_size > request->Info.Size) { return RX_RESET; }    
     
-    uint8_t *action = obj + sizeof(RequestT);
+    uint8_t* action = obj + sizeof(RequestT);
     uint8_t action_error = ACCEPT;
     
     uint8_t i = 0;
@@ -52,7 +57,10 @@ int rx_endline(xObject context, uint8_t *obj, uint16_t size){
     {
       if(request->Info.Key == Requests[i].Id)
       {
-        if(Requests[i].Control) { action_error = Requests[i].Control(0, action, action_size); }
+        memcpy(&debug_request, &Requests[i], sizeof(debug_request));
+        debug_action = action;
+        debug_action_size = action_size;
+        if(Requests[i].Control) { action_error = Requests[i].Control(&UsartX.Tx, action, action_size); }
         
         if(Requests[i].Response)
         {
@@ -71,6 +79,17 @@ int rx_endline(xObject context, uint8_t *obj, uint16_t size){
 //=================================================================================================================================
 xRequestT Requests[] = {
   NEW_REQUEST(GET_INFO, Response_REQUEST_GET, 0, Bootloader.Info),
+  NEW_REQUEST(GET_APP_INFO, Response_REQUEST_GET, 0, Bootloader.AppInfo),
+  NEW_REQUEST(GET_FIRMWARE, Response_REQUEST_GET, 0, FIRMWARE_VERSION),
+  NEW_REQUEST(GET_STATUS, Response_REQUEST_GET, 0, xFlash.Status),
+  
+  NEW_REQUEST(SET_FLASH_LOCK_STATE, Response_REQUEST_DEFAULT, ActionSetLockState, xFlash.Status),
+  
+  NEW_REQUEST(TRY_WRITE, Response_REQUEST_DEFAULT, ActionTryWrite, xFlash.Status),
+  NEW_REQUEST(TRY_ERASE, Response_REQUEST_DEFAULT, ActionTryErase, xFlash.Status),
+  NEW_REQUEST(TRY_JUMP_TO_MAIN, Response_REQUEST_DEFAULT, ActionTryJumpToMain, xFlash.Status),
+  NEW_REQUEST(TRY_UPDATE_INFO, Response_REQUEST_DEFAULT, ActionTryUpdateInfo, Bootloader.Info),
+  //NEW_REQUEST(TRY_READ_CRC, Response_REQUEST_DEFAULT, ActionReadInfo, Bootloader.Info),
   { .Id = -1 }
 };
 //=================================================================================================================================

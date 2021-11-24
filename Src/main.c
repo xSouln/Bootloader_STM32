@@ -83,11 +83,12 @@ void SystemClock_Config(void);
 /* Private function prototypes -----------------------------------------------*/
 xListT List;
 
-int remove_action = -1;
-int add_action = -1;
-int insert_action = -1;
 int count;
 int phase = 0;
+
+int main_request = 0;
+
+BootloaderInfoT flase_info;
 
 BootloaderInfoT bootloader_state;
 
@@ -102,7 +103,7 @@ SCB_Type* reg = SCB;
 
 /* USER CODE BEGIN 0 */
 void AppMain();
-
+/*
 void ThreadAction1(xThreadT* context, xThreadTaskT* request)
 {
   xListElementT *element = List.Head;
@@ -115,12 +116,12 @@ void ThreadAction1(xThreadT* context, xThreadTaskT* request)
   
   xTxAdd(&USBSerialPort.Tx, "\r", strlen("\r"));
 }
-
+*/
 void ThreadAction2(xThreadT* context, xThreadTaskT* request)
 {
   Ports.C.Out->LED ^= true;
 }
-
+/*
 void ThreadAction3(xThreadT* context, xThreadTaskT* request)
 {
   count++;
@@ -147,10 +148,10 @@ void ThreadAction3(xThreadT* context, xThreadTaskT* request)
   }
   phase++;
 }
-
+*/
 void TimerAction1(xTimerT* context, xTimerTaskT* request)
 {
-  xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction1, 0, 0, 0);
+  //xThreadAdd(&ThreadMain, (xThreadAction)ThreadAction1, 0, 0, 0);
 }
 
 void TimerAction2(xTimerT* context, xTimerTaskT* request)
@@ -165,13 +166,16 @@ void TimerAction3(xTimerT* context, xTimerTaskT* request)
 
 void AppMain()
 {
+  app_jump_address = *(uint32_t*)(APP_START_ADDRESS + 4);  
+  app_main = (AppFuncT)app_jump_address;
+  
   __disable_irq();
   
-  USBD_Stop(&hUsbDeviceFS);
-  USBD_DeInit(&hUsbDeviceFS);  
+  //USBD_Stop(&hUsbDeviceFS);
+  //USBD_DeInit(&hUsbDeviceFS);  
   HAL_DeInit();
   
-  __set_MSP(*(volatile uint32_t*)APLICATION_ADDRESS);
+  __set_MSP(*(volatile uint32_t*)APP_START_ADDRESS);
   app_main();
   
   NVIC_SystemReset();
@@ -185,20 +189,13 @@ void AppMain()
   */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
-  app_jump_address = *(uint32_t*)(APLICATION_ADDRESS + 4);  
-  app_main = (AppFuncT)app_jump_address;
-  
-  switch(bootloader_state.StartAddress)
-  {
-    case 1: return 0;
-    case 2: NVIC_SystemReset();
-  }
-  
+  /* USER CODE BEGIN 1 */  
   __set_PRIMASK(1);
   SCB->VTOR = ((uint32_t)0x08000000);
   __set_PRIMASK(0);
-
+  
+  //if(ActionTryUpdateInfo(0) == ACCEPT){ AppMain(); }
+  
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -222,11 +219,10 @@ int main(void)
   MX_DMA_Init();
   MX_TIM4_Init();
   MX_USART1_UART_Init();
-  MX_ADC1_Init();
-  MX_USB_DEVICE_Init();
+  //MX_ADC1_Init();
+  //MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
-  usart1_init();
-  
+  usart1_init();  
   reg->ICSR;
   
   TimerRequest1 = xTimerAdd(&TimerMain, (xTimerAction)TimerAction1, 1000, 1000);
@@ -238,13 +234,9 @@ int main(void)
   
   xTimerAdd(&TimerMain, (xTimerAction)TimerAction3, 10000, 0);
   
-  xListAdd(&List, "state:1 ");
-  xListAdd(&List, "state:2 ");
-  xListAdd(&List, "state:3 ");
-  xListAdd(&List, "state:4 ");
-  xListAdd(&List, "state:5 ");
-  
   bootloader_state.Crc = 0x0f;
+  
+  
   
   //first block ARRAYS,
   /* USER CODE END 2 */
@@ -253,8 +245,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    USBSerialPortThread();
+    //USBSerialPortThread();
     usart1_handler();
+    
+    if(Bootloader.Status.JumpToMain && !UsartX.Reg->CR1.TxEmptyInterruptEnable)
+    {
+      AppMain();
+    }
+    
+    switch(main_request)
+    {
+    case 1: ActionTryUpdateInfo(0); main_request = 0; break;
+    }
     
     xThread(&ThreadMain);
     xTimer(&TimerMain);

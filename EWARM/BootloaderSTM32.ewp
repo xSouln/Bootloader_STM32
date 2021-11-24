@@ -1063,6 +1063,9 @@
                     <name>$PROJ_DIR$\..\Sources\Bootloader.h</name>
                 </file>
                 <file>
+                    <name>$PROJ_DIR$\..\Sources\BootTypes.h</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\Sources\Ports.c</name>
                 </file>
                 <file>
@@ -1100,12 +1103,6 @@
                 </file>
                 <file>
                     <name>$xLibMcrocontrollers$\xRequest.h</name>
-                </file>
-                <file>
-                    <name>$xLibMcrocontrollers$\xResponse.c</name>
-                </file>
-                <file>
-                    <name>$xLibMcrocontrollers$\xResponse.h</name>
                 </file>
                 <file>
                     <name>$xLibMcrocontrollers$\xRx.c</name>
